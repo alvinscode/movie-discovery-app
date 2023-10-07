@@ -10,9 +10,17 @@ function Navbar({ isLoggedIn, onLogout }) {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ml-auto">
             {isLoggedIn ? (
-              <li className="nav-item">
-                <button className="btn btn-outline-danger" onClick={onLogout}>Logout</button>
-              </li>
+              <>
+                <li className="nav-item">
+                  <Link to="/user-settings" className="nav-link">User Settings</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/add-movie" className="nav-link">Add Movie</Link>
+                </li>
+                <li className="nav-item">
+                  <button className="btn btn-outline-danger" onClick={onLogout}>Logout</button>
+                </li>
+              </>
             ) : (
               <li className="nav-item">
                 <Link to="/login" className="nav-link">Login</Link>
