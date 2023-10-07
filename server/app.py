@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # Standard library imports
+import secrets
 
 # Remote library imports
 from flask import request, jsonify, session, redirect
@@ -16,8 +17,8 @@ from models import User, Movie, Review, Genre
 
 bcrypt = Bcrypt(app)
 
-def get_users():
-    return User.query.all()
+secret_key = secrets.token_hex(32)
+app.secret_key = secret_key
 
 @app.route('/')
 def index():
@@ -44,11 +45,10 @@ def login():
     username = data['username']
     password = data['password']
 
-    users = get_users()
-
-    user = next((user for user in users if user.username == username), None)
+    user = User.query.filter_by(username=username).first()
 
     if user and bcrypt.check_password_hash(user.password_hash, password):
+        session['user_id'] = user.id
         return jsonify({'message': 'Login successful'}), 200
     else:
         return jsonify({'message': 'Login failed'}), 401
