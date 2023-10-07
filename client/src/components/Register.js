@@ -29,6 +29,10 @@ function RegisterForm() {
             .then((response) => {
                 if (response.ok) {
                     setRegistrationMessage('Registration successful');
+                    setUsername('');
+                    setEmail('');
+                    setPassword('');
+                    setConfirmPassword('');
                 } else {
                     setRegistrationMessage('Registration failed');
                     console.error('Registration failed');
@@ -42,7 +46,6 @@ function RegisterForm() {
 
     return (
         <div>
-            <h2>Registration</h2>
             <input
                 type="text"
                 placeholder="Username"

@@ -21,6 +21,8 @@ function Login() {
             .then((response) => {
                 if (response.ok) {
                     setLoginMessage('Login successful');
+                    setUsername('');
+                    setPassword('');
                 } else {
                     setLoginMessage('Login failed');
                     console.error('Login failed');
