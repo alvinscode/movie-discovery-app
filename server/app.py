@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import request
+from flask import request, render_template
 from flask_restful import Resource
 
 # Local imports
@@ -15,7 +15,7 @@ from models import User, Movie, Review, Genre
 
 @app.route('/')
 def index():
-    return '<h1>Project Server</h1>'
+    return render_template('index.js')
 
 
 if __name__ == '__main__':
