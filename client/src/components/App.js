@@ -9,12 +9,10 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleLogin = () => {
-        // Implement your login logic here
         setIsLoggedIn(true);
     };
 
     const handleLogout = () => {
-        // Implement your logout logic here
         setIsLoggedIn(false);
     };
 
