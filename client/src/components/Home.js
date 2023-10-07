@@ -1,18 +1,48 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 
-function Home({ isLoggedIn, onLogout }) {
+function Home() {
+    const [movies, setMovies] = useState([]);
+
+    useEffect(() => {
+        fetch('/api/movies')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setMovies(data);
+            })
+            .catch((error) => {
+                console.error('Fetch error:', error);
+            });
+    }, []);
+
     return (
         <div>
-            {isLoggedIn ? (
+            {movies && movies.length > 0 ? (
                 <div>
-                    <p>Welcome, User!</p>
-                    <button onClick={onLogout}>Logout</button>
+                    {movies.map((movie) => (
+                        <div key={movie.id}>
+                            <h2>{movie.title}</h2>
+                            {movie.reviews && movie.reviews.length > 0 ? (
+                                <div>
+                                    <h3>Reviews:</h3>
+                                    <ul>
+                                        {movie.reviews.map((review) => (
+                                            <li key={review.id}>
+                                                {review.text}
+                                                <p>User: {review.user.username}</p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : (
+                                <p>No reviews available</p>
+                            )}
+                        </div>
+                    ))}
                 </div>
             ) : (
-                <div>
-                    <p>Please log in.</p>
-                </div>
+                <p>No movies available</p>
             )}
         </div>
     );

@@ -1,45 +1,39 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./Home";
-import Login from "./Login";
-import Register from "./Register";
-import NavBar from "./NavBar";
+import React, { useState } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import NavBar from './NavBar';
+import Login from './Login';
+import Register from './Register';
+import Home from './Home';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleLogin = () => {
+        // Implement your login logic here
         setIsLoggedIn(true);
     };
 
     const handleLogout = () => {
+        // Implement your logout logic here
         setIsLoggedIn(false);
     };
 
     return (
-      <Router>
-          <div>
-              <NavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-              <Switch>
-                  <Route path="/login">
-                      <Login onLogin={handleLogin} />
-                  </Route>
-                  <Route path="/register">
-                      <Register />
-                  </Route>
-                  <Route path="/">
-                      {isLoggedIn ? (
-                          <div>
-                              <p>Welcome, User!</p>
-                          </div>
-                      ) : (
-                          <Home />
-                      )}
-                  </Route>
-              </Switch>
-          </div>
-      </Router>
-  );
+        <div>
+            <NavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+            <Switch>
+                <Route path="/login">
+                    <Login onLogin={handleLogin} />
+                </Route>
+                <Route path="/register">
+                    <Register />
+                </Route>
+                <Route path="/">
+                    <Home isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+                </Route>
+            </Switch>
+        </div>
+    );
 }
 
 export default App;
