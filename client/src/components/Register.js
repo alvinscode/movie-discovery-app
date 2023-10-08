@@ -42,8 +42,21 @@ function Register() {
       });
   
       if (emailResponse.ok && usernameResponse.ok) {
-        console.log('Registration successful');
-        formik.resetForm();
+        const registrationResponse = await fetch('/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+  
+        if (registrationResponse.ok) {
+          console.log('Registration successful');
+          formik.resetForm();
+        } else {
+          const data = await registrationResponse.json();
+          console.error('Registration failed:', data.message);
+        }
       } else {
         const emailData = await emailResponse.json();
         const usernameData = await usernameResponse.json();
@@ -62,6 +75,7 @@ function Register() {
       formik.setSubmitting(false);
     }
   };
+  
   
   return (
     <div>
