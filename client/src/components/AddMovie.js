@@ -25,7 +25,7 @@ function AddMovie() {
     title: '',
     genreId: '',
     description: '',
-    releaseYear: '', // Added releaseYear field
+    releaseYear: '',
   };
 
   const validationSchema = Yup.object({

@@ -5,6 +5,7 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import AddMovie from './AddMovie'
+import EditMovie from './EditMovie'
 
 
 function App() {
@@ -30,6 +31,9 @@ function App() {
                 </Route>
                 <Route path="/add-movie">
                     <AddMovie />
+                </Route>
+                <Route path="/edit-movie">
+                    <EditMovie />
                 </Route>
                 <Route exact path="/">
                     <Home isLoggedIn={isLoggedIn} onLogout={handleLogout} />
