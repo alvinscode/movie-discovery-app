@@ -30,7 +30,7 @@ def index():
 
 @app.route('/register', methods=['POST'])
 def register():
-    username = request.json.get('username')
+    username = request.json.get('username').lower()
     email = request.json.get('email')
     password = request.json.get('password')
 
@@ -68,7 +68,7 @@ def check_email():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data['username']
+    username = data['username'].lower()
     password = data['password']
 
     user = User.query.filter_by(username=username).first()

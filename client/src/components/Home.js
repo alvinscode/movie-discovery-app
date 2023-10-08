@@ -77,7 +77,6 @@ function Home({ isLoggedIn }) {
   };
 
   const handleEditReview = (reviewId) => {
-    // Find the review that matches the reviewId
     const reviewToEdit = editingReview || movies.flatMap(movie => movie.reviews).find(review => review.id === reviewId);
 
     if (reviewToEdit) {
@@ -95,7 +94,7 @@ function Home({ isLoggedIn }) {
       };
 
       fetch(`/api/reviews/${editingReview.id}`, {
-        method: 'PATCH', // or 'PATCH' depending on your API
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -103,7 +102,6 @@ function Home({ isLoggedIn }) {
       })
         .then((response) => {
           if (response.status === 200) {
-            // Update the UI to reflect the changes
             const updatedMovies = movies.map((movie) => {
               const updatedReviews = movie.reviews.map((review) => {
                 if (review.id === editingReview.id) {
