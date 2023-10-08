@@ -20,6 +20,10 @@ bcrypt = Bcrypt(app)
 secret_key = secrets.token_hex(32)
 app.secret_key = secret_key
 
+def is_email_available(email):
+    existing_user = User.query.filter_by(email=email).first()
+    return existing_user is None
+
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
@@ -38,6 +42,28 @@ def register():
     db.session.commit()
 
     return jsonify(message='Registration successful'), 201
+
+@app.route('/api/check-username', methods=['POST'])
+def check_username():
+    data = request.get_json()
+    username = data.get('username')
+
+    user = User.query.filter_by(username=username).first()
+
+    if user:
+        return jsonify({'message': 'Username already in use'}), 409
+    else:
+        return jsonify({'message': 'Username is available'}), 200
+
+@app.route('/api/check-email', methods=['POST'])
+def check_email():
+    data = request.get_json()
+    email = data.get('email')
+
+    if is_email_available(email):
+        return jsonify({'message': 'Email is available'}), 200
+    else:
+        return jsonify({'message': 'Email is already in use'}), 400
 
 @app.route('/login', methods=['POST'])
 def login():
