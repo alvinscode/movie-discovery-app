@@ -207,6 +207,43 @@ def review_details(review_id):
         db.session.commit()
 
         return jsonify({'message': 'Review deleted successfully'}), 200
+    
+@app.route('/api/genres', methods=['GET'])
+def get_genres():
+    genres = Genre.query.all()
+    genre_list = [{'id': genre.id, 'name': genre.name} for genre in genres]
+    return jsonify({'genres': genre_list})
+
+@app.route('/api/add-movie', methods=['POST'])
+def add_movie():
+    if not 'user_id' in session:
+        return jsonify({'message': 'You must be logged in to add a movie'}), 401
+
+    data = request.get_json()
+
+    title = data.get('title')
+    genre_id = data.get('genreId')
+    description = data.get('description')
+    release_year = data.get('releaseYear')
+
+    if not title or not genre_id:
+        return jsonify({'message': 'Title and Genre are required fields'}), 400
+
+    genre = Genre.query.get(genre_id)
+    if not genre:
+        return jsonify({'message': 'Genre not found'}), 404
+
+    new_movie = Movie(
+        title=title,
+        description=description,
+        release_year=release_year,
+        genres=[genre],
+    )
+
+    db.session.add(new_movie)
+    db.session.commit()
+
+    return jsonify({'message': 'Movie added successfully'}), 201
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
