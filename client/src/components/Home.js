@@ -16,6 +16,9 @@ function Home({ isLoggedIn }) {
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [expandedMovies, setExpandedMovies] = useState([]);
   const [loggedInUserId, setLoggedInUserId] = useState(null);
+  const [editingReview, setEditingReview] = useState(null);
+  const [editedText, setEditedText] = useState('');
+  const [editedRating, setEditedRating] = useState(0);
 
   useEffect(() => {
     fetch('/api/movies')
@@ -73,6 +76,58 @@ function Home({ isLoggedIn }) {
     }
   };
 
+  const handleEditReview = (reviewId) => {
+    // Find the review that matches the reviewId
+    const reviewToEdit = editingReview || movies.flatMap(movie => movie.reviews).find(review => review.id === reviewId);
+
+    if (reviewToEdit) {
+      setEditingReview(reviewToEdit);
+      setEditedText(reviewToEdit.text);
+      setEditedRating(reviewToEdit.rating);
+    }
+  };
+
+  const handleSaveEditedReview = () => {
+    if (editingReview) {
+      const updatedReview = {
+        text: editedText,
+        rating: editedRating,
+      };
+
+      fetch(`/api/reviews/${editingReview.id}`, {
+        method: 'PATCH', // or 'PATCH' depending on your API
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedReview),
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            // Update the UI to reflect the changes
+            const updatedMovies = movies.map((movie) => {
+              const updatedReviews = movie.reviews.map((review) => {
+                if (review.id === editingReview.id) {
+                  return { ...review, text: editedText, rating: editedRating };
+                }
+                return review;
+              });
+              return { ...movie, reviews: updatedReviews };
+            });
+
+            setMovies(updatedMovies);
+            setEditingReview(null);
+            setEditedText('');
+            setEditedRating(0);
+          } else {
+            throw new Error('Review update failed');
+          }
+        })
+        .catch((error) => {
+          console.error('Review update error:', error);
+        });
+    }
+  };
+
   const handleDeleteReview = (reviewId) => {
     fetch(`/api/reviews/${reviewId}`, {
       method: 'DELETE',
@@ -115,7 +170,7 @@ function Home({ isLoggedIn }) {
                 style={{ cursor: 'pointer' }}
                 onClick={() => toggleMovieExpansion(movie.id)}
               >
-                {movie.title} (Genre: {movie.genres.join(', ')}, Rating: {calculateAverageRating(movie.reviews)})
+                {movie.title} (Avg. Rating: {calculateAverageRating(movie.reviews)})
               </h2>
               {expandedMovies.includes(movie.id) && (
                 <div>
@@ -125,11 +180,37 @@ function Home({ isLoggedIn }) {
                       <ul>
                         {movie.reviews.map((review) => (
                           <li key={review.id}>
-                            {review.text}
-                            <p>Rating: {review.rating}</p>
-                            <p>User: {review.user.username}</p> 
-                            {isLoggedIn && review.user.id === loggedInUserId && (
-                              <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                            {editingReview && editingReview.id === review.id ? (
+                              <div>
+                                <textarea
+                                  value={editedText}
+                                  onChange={(e) => setEditedText(e.target.value)}
+                                />
+                                <label>
+                                  Rating:
+                                  <input
+                                    type="number"
+                                    value={editedRating}
+                                    onChange={(e) => setEditedRating(Number(e.target.value))}
+                                    min="0"
+                                    max="5"
+                                    step="0.1"
+                                  />
+                                </label>
+                                <button onClick={handleSaveEditedReview}>Save</button>
+                              </div>
+                            ) : (
+                              <div>
+                                {review.text}
+                                <p>Rating: {review.rating}</p>
+                                <p>User: {review.user.username}</p>
+                                {isLoggedIn && review.user.id === loggedInUserId && (
+                                  <div>
+                                    <button onClick={() => handleEditReview(review.id)}>Edit</button>
+                                    <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                                  </div>
+                                )}
+                              </div>
                             )}
                           </li>
                         ))}

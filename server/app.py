@@ -136,24 +136,51 @@ def add_review(movie_id):
 
     return jsonify(response_data), 201
 
-@app.route('/api/reviews/<int:review_id>', methods=['DELETE'])
-def delete_review(review_id):
-    if 'user_id' not in session:
-        return jsonify({'message': 'You must be logged in to delete a review'}), 401
-
-    user_id = session['user_id']
-
+@app.route('/api/reviews/<int:review_id>', methods=['GET', 'POST', 'PATCH', 'DELETE'])
+def review_details(review_id):
     review = Review.query.get(review_id)
+
     if not review:
         return jsonify({'message': 'Review not found'}), 404
 
-    if review.user_id != user_id:
-        return jsonify({'message': 'You are not authorized to delete this review'}), 403
+    if request.method == 'GET':
 
-    db.session.delete(review)
-    db.session.commit()
+        if review.user_id != session.get('user_id'):
+            return jsonify({'message': 'You are not authorized to view this review'}), 403
 
-    return jsonify({'message': 'Review deleted successfully'}), 200
+        review_info = {
+            'id': review.id,
+            'text': review.text,
+            'rating': review.rating,
+        }
+
+        return jsonify(review_info)
+
+    elif request.method == 'PATCH':
+
+        if review.user_id != session.get('user_id'):
+            return jsonify({'message': 'You are not authorized to edit this review'}), 403
+
+        data = request.get_json()
+        updated_text = data.get('text')
+        updated_rating = data.get('rating')
+
+        review.text = updated_text
+        review.rating = updated_rating
+
+        db.session.commit()
+
+        return jsonify({'message': 'Review updated successfully'}), 200
+
+    elif request.method == 'DELETE':
+
+        if review.user_id != session.get('user_id'):
+            return jsonify({'message': 'You are not authorized to delete this review'}), 403
+
+        db.session.delete(review)
+        db.session.commit()
+
+        return jsonify({'message': 'Review deleted successfully'}), 200
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
