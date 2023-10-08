@@ -15,7 +15,7 @@ function Navbar({ isLoggedIn, onLogout }) {
                   <Link to="/add-movie" className="nav-link">Add New Movie</Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/edit-movie" className="nav-link">Edit Movies</Link>
+                  <Link to="/edit-movie" className="nav-link">Delete Movies</Link>
                 </li>
                 <li className="nav-item">
                   <button className="btn btn-outline-danger" onClick={onLogout}>Logout</button>

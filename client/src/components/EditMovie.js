@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 
 function EditMovie() {
+  const { movieId } = useParams();
+  const history = useHistory();
+
   const [movies, setMovies] = useState([]);
-  const [editableMovieId, setEditableMovieId] = useState(null);
-  const [editedMovieTitle, setEditedMovieTitle] = useState('');
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
-    // Fetch all movies from the server when the component mounts
     fetch('/api/movies')
       .then((response) => {
         if (!response.ok) {
@@ -14,57 +16,26 @@ function EditMovie() {
         }
         return response.json();
       })
-      .then((data) => setMovies(data.movies))
-      .catch((error) => {
-        console.error('Error fetching movies:', error);
-        setMovies([]);
-      });
-  }, []);
-
-  // Function to update a movie's title
-  const updateMovieTitle = (movieId) => {
-    // Send a PATCH request to the server to update the movie title
-    fetch(`/api/movies/${movieId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title: editedMovieTitle }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Update the title in the movies array
-          setMovies((prevMovies) =>
-            prevMovies.map((movie) =>
-              movie.id === movieId
-                ? { ...movie, title: editedMovieTitle }
-                : movie
-            )
-          );
-
-          // Clear the editable state
-          setEditableMovieId(null);
-        } else {
-          console.error('Failed to update movie title');
-        }
+      .then((data) => {
+        setMovies(data.movies);
+        const movieToEdit = data.movies.find((movie) => movie.id === parseInt(movieId));
+        setSelectedMovie(movieToEdit);
       })
       .catch((error) => {
-        console.error('Update movie title error:', error);
+        console.error('Error fetching movies:', error);
       });
-  };
+  }, [movieId]);
 
-  // Function to delete a movie by ID
-  const deleteMovie = (movieId) => {
-    // Send a DELETE request to the server to delete the movie
-    fetch(`/api/movies/${movieId}`, {
+  const handleDelete = (movie) => {
+    fetch(`/api/movies/${movie.id}`, {
       method: 'DELETE',
     })
       .then((response) => {
         if (response.ok) {
-          // Remove the deleted movie from the movies array
-          setMovies((prevMovies) =>
-            prevMovies.filter((movie) => movie.id !== movieId)
-          );
+          console.log('Movie deleted successfully');
+          const updatedMovies = movies.filter((m) => m.id !== movie.id);
+          setMovies(updatedMovies);
+          setSelectedMovie(null);
         } else {
           console.error('Failed to delete movie');
         }
@@ -76,29 +47,18 @@ function EditMovie() {
 
   return (
     <div>
-      <h2>Edit Movies</h2>
-      <ul>
-        {movies.map((movie) => (
-          <li key={movie.id}>
-            {editableMovieId === movie.id ? (
-              <div>
-                <input
-                  type="text"
-                  value={editedMovieTitle}
-                  onChange={(e) => setEditedMovieTitle(e.target.value)}
-                />
-                <button onClick={() => updateMovieTitle(movie.id)}>Save</button>
-              </div>
-            ) : (
-              <div>
-                {movie.title}
-                <button onClick={() => setEditableMovieId(movie.id)}>Edit</button>
-                <button onClick={() => deleteMovie(movie.id)}>Delete</button>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
+      <h2>Delete Movie</h2>
+      <div>
+        <h3>Select a movie to delete:</h3>
+        <ul>
+          {movies.map((movie) => (
+            <li key={movie.id}>
+              {movie.title}{' '}
+              <button onClick={() => handleDelete(movie)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
