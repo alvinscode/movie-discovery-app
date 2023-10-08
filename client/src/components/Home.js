@@ -115,7 +115,7 @@ function Home({ isLoggedIn }) {
                 style={{ cursor: 'pointer' }}
                 onClick={() => toggleMovieExpansion(movie.id)}
               >
-                {movie.title} (Avg Rating: {calculateAverageRating(movie.reviews)})
+                {movie.title} (Genre: {movie.genres.join(', ')}, Rating: {calculateAverageRating(movie.reviews)})
               </h2>
               {expandedMovies.includes(movie.id) && (
                 <div>

@@ -11,7 +11,7 @@ from flask_bcrypt import Bcrypt
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Movie, Review, Genre
+from models import User, Movie, Review, Genre, movie_genre_association
 
 # Views go here!
 
@@ -60,10 +60,15 @@ def logout():
 
 @app.route('/api/movies', methods=['GET'])
 def get_movies():
-    movies = Movie.query.all()
+    movies = (
+            Movie.query
+            .join(movie_genre_association)
+            .join(Genre)
+            .all()
+    )
     movie_data = []
     loggedInUserId = session.get('user_id')
-    
+
     for movie in movies:
         reviews = Review.query.filter_by(movie_id=movie.id).all()
         review_data = []
@@ -85,7 +90,8 @@ def get_movies():
         movie_info = {
             'id': movie.id,
             'title': movie.title,
-            'reviews': review_data
+            'reviews': review_data,
+            'genres': [genre.name for genre in movie.genres]
         }
         movie_data.append(movie_info)
 
