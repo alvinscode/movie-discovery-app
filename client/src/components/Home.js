@@ -14,7 +14,6 @@ function Home({ isLoggedIn }) {
   const [movies, setMovies] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
-  const [expandedMovies, setExpandedMovies] = useState([]);
   const [loggedInUserId, setLoggedInUserId] = useState(null);
   const [editingReview, setEditingReview] = useState(null);
   const [editedText, setEditedText] = useState('');

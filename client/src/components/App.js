@@ -4,6 +4,7 @@ import NavBar from './NavBar';
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
+import UserSettings from './UserSettings';
 
 
 function App() {
@@ -27,7 +28,10 @@ function App() {
                 <Route path="/register">
                     <Register />
                 </Route>
-                <Route path="/">
+                <Route path="/user-settings">
+                    <UserSettings />
+                </Route>
+                <Route exact path="/">
                     <Home isLoggedIn={isLoggedIn} onLogout={handleLogout} />
                 </Route>
             </Switch>

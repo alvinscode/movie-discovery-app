@@ -6,7 +6,7 @@ import secrets
 # Remote library imports
 from flask import request, jsonify, session, redirect
 from flask_restful import Resource
-from flask_bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt, check_password_hash
 
 # Local imports
 from config import app, db, api

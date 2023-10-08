@@ -12,10 +12,10 @@ function Navbar({ isLoggedIn, onLogout }) {
             {isLoggedIn ? (
               <>
                 <li className="nav-item">
-                  <Link to="/user-settings" className="nav-link">User Settings</Link>
+                  <Link to="/add-movie" className="nav-link">Add New Movie</Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/add-movie" className="nav-link">Add Movie</Link>
+                  <Link to="/edit-movie" className="nav-link">Edit My Movies</Link>
                 </li>
                 <li className="nav-item">
                   <button className="btn btn-outline-danger" onClick={onLogout}>Logout</button>
