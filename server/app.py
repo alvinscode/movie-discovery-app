@@ -104,13 +104,49 @@ def add_review(movie_id):
     movie = Movie.query.get(movie_id)
     if not movie:
         return jsonify({'message': 'Movie not found'}), 404
+    
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
     new_review = Review(text=review_text, rating=review_rating, user_id=user_id, movie_id=movie_id)
 
     db.session.add(new_review)
     db.session.commit()
 
-    return jsonify({'message': 'Review added successfully'}), 201
+    response_data = {
+        'message': 'Review added successfully',
+        'review': {
+            'id': new_review.id,
+            'text': new_review.text,
+            'rating': new_review.rating,
+            'user': {
+                'id': user.id,
+                'username': user.username
+            }
+        }
+    }
+
+    return jsonify(response_data), 201
+
+@app.route('/api/reviews/<int:review_id>', methods=['DELETE'])
+def delete_review(review_id):
+    if 'user_id' not in session:
+        return jsonify({'message': 'You must be logged in to delete a review'}), 401
+
+    user_id = session['user_id']
+
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({'message': 'Review not found'}), 404
+
+    if review.user_id != user_id:
+        return jsonify({'message': 'You are not authorized to delete this review'}), 403
+
+    db.session.delete(review)
+    db.session.commit()
+
+    return jsonify({'message': 'Review deleted successfully'}), 200
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
