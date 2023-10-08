@@ -89,6 +89,27 @@ def get_movies():
 
     return jsonify(movie_data)
 
+@app.route('/api/movies/<int:movie_id>/add-review', methods=['POST'])
+def add_review(movie_id):
+    if 'user_id' not in session:
+        return jsonify({'message': 'You must be logged in to add a review'}), 401
+
+    user_id = session['user_id']
+
+    data = request.get_json()
+    review_text = data.get('text')
+
+    movie = Movie.query.get(movie_id)
+    if not movie:
+        return jsonify({'message': 'Movie not found'}), 404
+
+    new_review = Review(user_id=user_id, movie_id=movie_id, text=review_text)
+
+    db.session.add(new_review)
+    db.session.commit()
+
+    return jsonify({'message': 'Review added successfully'}), 201
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
