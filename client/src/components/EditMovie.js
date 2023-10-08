@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './EditMovie.css'
 
 function EditMovie() {
   const { movieId } = useParams();
-  const history = useHistory();
 
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);

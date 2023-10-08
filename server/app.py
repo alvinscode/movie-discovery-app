@@ -245,31 +245,18 @@ def add_movie():
 
     return jsonify({'message': 'Movie added successfully'}), 201
 
-@app.route('/api/movies/<int:movie_id>', methods=['GET', 'PATCH', 'DELETE'])
-def manage_movie(movie_id):
+@app.route('/api/movies/<int:movie_id>', methods=['DELETE'])
+def delete_movie(movie_id):
     movie = Movie.query.get(movie_id)
 
     if not movie:
         return jsonify({'message': 'Movie not found'}), 404
 
-    if request.method == 'GET':
-        return jsonify({'title': movie.title})
 
-    elif request.method == 'PATCH':
-        data = request.get_json()
-        new_title = data.get('title')
+    db.session.delete(movie)
+    db.session.commit()
 
-        if new_title:
-            movie.title = new_title
-            db.session.commit()
-            return jsonify({'message': 'Movie title updated successfully'}), 200
-        else:
-            return jsonify({'message': 'Title field is required for updating'}), 400
-
-    elif request.method == 'DELETE':
-        db.session.delete(movie)
-        db.session.commit()
-        return jsonify({'message': 'Movie deleted successfully'}), 200
+    return jsonify({'message': 'Movie deleted successfully'}), 200
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
