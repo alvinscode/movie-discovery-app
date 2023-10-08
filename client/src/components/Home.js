@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Review from './Review';
 
+function calculateAverageRating(reviews) {
+  if (!reviews || reviews.length === 0) {
+    return 0;
+  }
+
+  const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+  return (totalRating / reviews.length).toFixed(1);
+}
+
 function Home({ isLoggedIn }) {
   const [movies, setMovies] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -106,7 +115,7 @@ function Home({ isLoggedIn }) {
                 style={{ cursor: 'pointer' }}
                 onClick={() => toggleMovieExpansion(movie.id)}
               >
-                {movie.title}
+                {movie.title} (Avg Rating: {calculateAverageRating(movie.reviews)})
               </h2>
               {expandedMovies.includes(movie.id) && (
                 <div>
@@ -117,7 +126,8 @@ function Home({ isLoggedIn }) {
                         {movie.reviews.map((review) => (
                           <li key={review.id}>
                             {review.text}
-                            <p>User: {review.user.username}</p>
+                            <p>Rating: {review.rating}</p>
+                            <p>User: {review.user.username}</p> 
                             {isLoggedIn && review.user.id === loggedInUserId && (
                               <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
                             )}
