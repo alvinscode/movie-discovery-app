@@ -1,0 +1,96 @@
+/* Home.css */
+
+.container {
+    background-color: #f2f2f2;
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  h2 span {
+    color: #007bff;
+  }
+  
+  ul li p {
+    color: #555;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  button.btn-outline-primary,
+  button.btn-outline-danger {
+    border-color: #007bff;
+    color: #007bff;
+  }
+  
+  button.btn-outline-primary:hover,
+  button.btn-outline-danger:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .review-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+  }
+  
+  .review-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .review-rating {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .review-user {
+    font-size: 14px;
+    color: #666;
+  }
+
+.review-edit-section {
+    margin-top: 10px;
+  }
+  
+  .review-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .review-rating-label {
+    display: block;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .review-rating-input {
+    width: 60px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .review-save-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .review-save-button:hover {
+    background-color: #0056b3;
+  }

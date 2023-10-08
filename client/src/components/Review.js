@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import './Review.css'
 
 function Review({ onSubmit }) {
   const initialValues = {
@@ -23,7 +24,7 @@ function Review({ onSubmit }) {
   };
 
   return (
-    <div>
+    <div className="review-container">
       <h2>Submit a Review</h2>
       <Formik
         initialValues={initialValues}
@@ -39,7 +40,7 @@ function Review({ onSubmit }) {
                 id="reviewText"
                 name="reviewText"
                 as="textarea"
-                className="form-control"
+                className="form-control form-control-textarea"
               />
               <ErrorMessage name="reviewText" component="div" className="text-danger" />
             </div>

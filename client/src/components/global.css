@@ -1,0 +1,11 @@
+/* global.css */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  body {
+    background-color: #f2f2f2;
+    font-family: 'Open Sans', sans-serif;
+  }

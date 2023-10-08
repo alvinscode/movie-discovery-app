@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import './Login.css'
 
 function Login({ onLogin }) {
     const [username, setUsername] = useState('');
@@ -42,33 +43,33 @@ function Login({ onLogin }) {
     };
 
     return (
-        <div>
-            {showLoginForm && (
-                <>
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button onClick={handleLogin}>Login</button>
-                    <p>{loginMessage}</p>
-                </>
-            )}
-            <p>
-                Don't have an account?{' '}
-                <Link to="/register" onClick={toggleLoginForm}>
-                    Register here
-                </Link>
-            </p>
+        <div className="login-container">
+          {showLoginForm && (
+            <>
+              <input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button onClick={handleLogin}>Login</button>
+              <p className="text-danger">{loginMessage}</p>
+            </>
+          )}
+          <p className="link-text">
+            Don't have an account?{' '}
+            <Link to="/register" onClick={toggleLoginForm}>
+              Register here
+            </Link>
+          </p>
         </div>
-    );
-}
+      );
+    }
 
 export default Login;

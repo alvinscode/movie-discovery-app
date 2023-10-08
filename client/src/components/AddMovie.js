@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import './AddMovie.css'
 
 function AddMovie() {
   const [genres, setGenres] = useState([]);
@@ -67,43 +68,51 @@ function AddMovie() {
   };
 
   return (
-    <div>
+    <div className="add-movie-container">
       <h2>Add Movie</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={(values, formik) => handleSubmit(values, formik)}
       >
-        <Form>
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <Field type="text" id="title" name="title" className="form-control" />
-            <ErrorMessage name="title" component="div" className="text-danger" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="genreId">Genre</label>
-            <Field as="select" id="genreId" name="genreId" className="form-control">
-              <option value="">Select a genre</option>
-              {genres.map((genre) => (
-                <option key={genre.id} value={genre.id}>
-                  {genre.name}
-                </option>
-              ))}
-            </Field>
-            <ErrorMessage name="genreId" component="div" className="text-danger" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <Field as="textarea" id="description" name="description" className="form-control" />
-            <ErrorMessage name="description" component="div" className="text-danger" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="releaseYear">Release Year</label>
-            <Field type="number" id="releaseYear" name="releaseYear" className="form-control" />
-            <ErrorMessage name="releaseYear" component="div" className="text-danger" />
-          </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
-        </Form>
+        {(formik) => (
+          <Form>
+            <div className="form-group">
+              <label htmlFor="title">Title</label>
+              <Field type="text" id="title" name="title" className="form-control" />
+              <ErrorMessage name="title" component="div" className="text-danger" />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="genreId">Genre</label>
+              <Field as="select" id="genreId" name="genreId" className="form-control">
+                <option value="">Select a genre</option>
+                {genres.map((genre) => (
+                  <option key={genre.id} value={genre.id}>
+                    {genre.name}
+                  </option>
+                ))}
+              </Field>
+              <ErrorMessage name="genreId" component="div" className="text-danger" />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="description">Description</label>
+              <Field as="textarea" id="description" name="description" className="form-control" />
+              <ErrorMessage name="description" component="div" className="text-danger" />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="releaseYear">Release Year</label>
+              <Field type="number" id="releaseYear" name="releaseYear" className="form-control" />
+              <ErrorMessage name="releaseYear" component="div" className="text-danger" />
+            </div>
+
+            <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>
+              Submit
+            </button>
+          </Form>
+        )}
       </Formik>
     </div>
   );

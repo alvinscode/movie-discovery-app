@@ -1,0 +1,36 @@
+/* Review.css */
+
+.review-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-control-textarea {
+    width: 100%;
+    max-width: 400px;
+    height: 100px;
+    resize: none;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  .review-container {
+    max-width: 400px;
+    margin: 0 auto;
+    margin-right: auto;
+  }

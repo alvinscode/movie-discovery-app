@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import './Register.css'
 
 function Register() {
   const initialValues = {
@@ -78,7 +79,7 @@ function Register() {
   
   
   return (
-    <div>
+    <div className="form-container">
       <h2>Register</h2>
       <Formik
         initialValues={initialValues}

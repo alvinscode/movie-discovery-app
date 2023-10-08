@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Review from './Review';
+import './Home.css'
 
 function calculateAverageRating(reviews) {
   if (!reviews || reviews.length === 0) {
@@ -166,10 +167,11 @@ function Home({ isLoggedIn }) {
       {movies && movies.length > 0 ? (
         <div>
           {movies.map((movie) => (
-            <div key={movie.id}>
+            <div key={movie.id} className="movie-card">
               <h2
                 style={{ cursor: 'pointer' }}
                 onClick={() => toggleMovieExpansion(movie.id)}
+                className="movie-title"
               >
                 {movie.title} (Genre: {movie.genres.join(', ')}, Avg. Rating: {calculateAverageRating(movie.reviews)})
               </h2>
@@ -177,17 +179,18 @@ function Home({ isLoggedIn }) {
                 <div>
                   {movie.reviews && movie.reviews.length > 0 ? (
                     <div>
-                      <h3>Reviews:</h3>
-                      <ul>
+                      <h3 className="review-heading">Reviews:</h3>
+                      <ul className="review-list">
                         {movie.reviews.map((review) => (
-                          <li key={review.id}>
+                          <li key={review.id} className="review-item">
                             {editingReview && editingReview.id === review.id ? (
-                              <div>
+                              <div className="review-container">
                                 <textarea
                                   value={editedText}
                                   onChange={(e) => setEditedText(e.target.value)}
+                                  className="review-textarea"
                                 />
-                                <label>
+                                <label className="review-rating-label">
                                   Rating:
                                   <input
                                     type="number"
@@ -196,19 +199,20 @@ function Home({ isLoggedIn }) {
                                     min="0"
                                     max="5"
                                     step="0.1"
+                                    className="review-rating-input"
                                   />
                                 </label>
-                                <button onClick={handleSaveEditedReview}>Save</button>
+                                <button onClick={handleSaveEditedReview} className="review-save-button">Save</button>
                               </div>
                             ) : (
-                              <div>
-                                {review.text}
-                                <p>Rating: {review.rating}</p>
-                                <p>User: {review.user.username}</p>
+                              <div className='review-container'>
+                                <p className="review-text">{review.text}</p>
+                                <p className="review-rating">Rating: {review.rating}</p>
+                                <p className="review-user">Written By: {review.user.username}</p>
                                 {isLoggedIn && review.user.id === loggedInUserId && (
                                   <div>
-                                    <button onClick={() => handleEditReview(review.id)}>Edit</button>
-                                    <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                                    <button onClick={() => handleEditReview(review.id)} className="review-button">Edit</button>
+                                    <button onClick={() => handleDeleteReview(review.id)} className="review-button">Delete</button>
                                   </div>
                                 )}
                               </div>
@@ -218,10 +222,10 @@ function Home({ isLoggedIn }) {
                       </ul>
                     </div>
                   ) : (
-                    <p>No reviews available</p>
+                    <p className="no-reviews">No reviews available</p>
                   )}
                   {isLoggedIn && (
-                    <button onClick={() => handleAddReview(movie.id)}>Add Review</button>
+                    <button onClick={() => handleAddReview(movie.id)} className="add-review-button">Add Review</button>
                   )}
                   {showReviewForm && selectedMovieId && isLoggedIn && (
                     <Review
@@ -236,7 +240,7 @@ function Home({ isLoggedIn }) {
           ))}
         </div>
       ) : (
-        <p>No movies available</p>
+        <p className="no-movies">No movies available</p>
       )}
     </div>
   );

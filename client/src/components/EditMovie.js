@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import './EditMovie.css'
 
 function EditMovie() {
   const { movieId } = useParams();
@@ -46,7 +47,7 @@ function EditMovie() {
   };
 
   return (
-    <div>
+    <div className="edit-movie-container">
       <h2>Delete Movie</h2>
       <div>
         <h3>Select a movie to delete:</h3>

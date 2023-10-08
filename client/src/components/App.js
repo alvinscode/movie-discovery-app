@@ -6,7 +6,7 @@ import Register from './Register';
 import Home from './Home';
 import AddMovie from './AddMovie'
 import EditMovie from './EditMovie'
-
+import './global.css'
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);

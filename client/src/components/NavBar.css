@@ -1,0 +1,33 @@
+/* NavBar.css */
+
+/* Background color similar to Home */
+.navbar {
+    background-color: #f2f2f2;
+  }
+  
+  /* Brand text color similar to Home title */
+  .navbar-brand {
+    color: #333;
+  }
+  
+  /* Navbar link color similar to Home links */
+  .navbar-nav .nav-link {
+    color: #007bff; /* Blue color similar to Home links */
+  }
+  
+  /* Navbar link hover color */
+  .navbar-nav .nav-link:hover {
+    color: #0056b3; /* Darker blue color on hover */
+  }
+  
+  /* Logout button color similar to Home button */
+  .btn-outline-danger {
+    border-color: #007bff; /* Blue color similar to Home links */
+    color: #007bff; /* Blue text color */
+  }
+  
+  /* Logout button hover colors */
+  .btn-outline-danger:hover {
+    background-color: #007bff; /* Blue color on hover */
+    color: #fff; /* White text color on hover */
+  }
