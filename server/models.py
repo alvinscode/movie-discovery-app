@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 
@@ -42,7 +42,7 @@ class User(db.Model):
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
+    title = db.Column(db.String(255), nullable=False)
     release_year = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text)
     average_rating = db.Column(db.Float, default=0)
@@ -57,7 +57,7 @@ class Movie(db.Model):
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.Text, nullable=False)
+    text = db.Column(db.Text(1000), nullable=False)
     rating = db.Column(db.Float, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -65,6 +65,12 @@ class Review(db.Model):
 
     def __repr__(self):
         return f'<Review by {self.user_id} for {self.movie_id}>'
+    
+    @validates('rating')
+    def validate_rating(self, key, rating):
+        if not (0.0 <= rating <= 5.0):
+            raise ValueError("Rating must be between 0.0 and 5.0")
+        return rating
 
 class Genre(db.Model):
     id = db.Column(db.Integer, primary_key=True)
