@@ -19,6 +19,7 @@ function Home({ isLoggedIn }) {
   const [editingReview, setEditingReview] = useState(null);
   const [editedText, setEditedText] = useState('');
   const [editedRating, setEditedRating] = useState(0);
+  const [expandedMovieId, setExpandedMovieId] = useState(null);
 
   useEffect(() => {
     fetch('/api/movies')
@@ -33,8 +34,13 @@ function Home({ isLoggedIn }) {
 }, []);
 
   const handleAddReview = (movieId) => {
-    setSelectedMovieId(movieId);
-    setShowReviewForm(true);
+    if (selectedMovieId === movieId) {
+      setSelectedMovieId(null);
+      setShowReviewForm(false);
+    } else {
+      setSelectedMovieId(movieId);
+      setShowReviewForm(true);
+    }
   };
 
   const handleSubmitReview = (reviewText, rating, movieId) => {
@@ -149,13 +155,11 @@ function Home({ isLoggedIn }) {
   };
 
   const toggleMovieExpansion = (movieId) => {
-    setExpandedMovies((prevExpandedMovies) => {
-      if (prevExpandedMovies.includes(movieId)) {
-        return prevExpandedMovies.filter((id) => id !== movieId);
-      } else {
-        return [...prevExpandedMovies, movieId];
-      }
-    });
+    if (expandedMovieId === movieId) {
+      setExpandedMovieId(null);
+    } else {
+      setExpandedMovieId(movieId);
+    }
   };
 
   return (
@@ -170,7 +174,7 @@ function Home({ isLoggedIn }) {
               >
                 {movie.title} (Genre: {movie.genres.join(', ')}, Avg. Rating: {calculateAverageRating(movie.reviews)})
               </h2>
-              {expandedMovies.includes(movie.id) && (
+              {expandedMovieId === movie.id && (
                 <div>
                   {movie.reviews && movie.reviews.length > 0 ? (
                     <div>
@@ -220,7 +224,7 @@ function Home({ isLoggedIn }) {
                   {isLoggedIn && (
                     <button onClick={() => handleAddReview(movie.id)}>Add Review</button>
                   )}
-                  {showReviewForm && isLoggedIn && (
+                  {showReviewForm && selectedMovieId && isLoggedIn && (
                     <Review
                       onSubmit={(reviewText, rating) =>
                         handleSubmitReview(reviewText, rating, selectedMovieId)
