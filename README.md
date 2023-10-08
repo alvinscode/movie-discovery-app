@@ -35,7 +35,9 @@ npm start --prefix client
 
 - Home.js would be the most important file in this project, as the majority
 of the app is based here. The user will be able to view a list of all movies
-in the database, leave and edit reviews.
+in the database, leave and edit reviews. The review functionality of this app
+is the most sophisticated, as it allows the user to create, read, update, and
+delete reviews that they have posted.
 
 - NavBar.js will handle the logging in and out of the user, with a link a
 login form built into the NavBar itself. Inside the login form will be a
