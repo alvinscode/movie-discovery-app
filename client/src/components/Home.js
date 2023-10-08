@@ -6,17 +6,19 @@ function Home({ isLoggedIn }) {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [expandedMovies, setExpandedMovies] = useState([]);
+  const [loggedInUserId, setLoggedInUserId] = useState(null);
 
   useEffect(() => {
     fetch('/api/movies')
       .then((response) => response.json())
       .then((data) => {
-        setMovies(data);
+        setMovies(data.movies);
+        setLoggedInUserId(data.loggedInUserId);
       })
       .catch((error) => {
         console.error('Fetch error:', error);
       });
-  }, []);
+}, []);
 
   const handleAddReview = (movieId) => {
     setSelectedMovieId(movieId);
@@ -62,6 +64,28 @@ function Home({ isLoggedIn }) {
     }
   };
 
+  const handleDeleteReview = (reviewId) => {
+    fetch(`/api/reviews/${reviewId}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setMovies((prevMovies) => {
+            const updatedMovies = [...prevMovies];
+            updatedMovies.forEach((movie) => {
+              movie.reviews = movie.reviews.filter((review) => review.id !== reviewId);
+            });
+            return updatedMovies;
+          });
+        } else {
+          throw new Error('Review deletion failed');
+        }
+      })
+      .catch((error) => {
+        console.error('Review deletion error:', error);
+      });
+  };
+
   const toggleMovieExpansion = (movieId) => {
     setExpandedMovies((prevExpandedMovies) => {
       if (prevExpandedMovies.includes(movieId)) {
@@ -94,6 +118,9 @@ function Home({ isLoggedIn }) {
                           <li key={review.id}>
                             {review.text}
                             <p>User: {review.user.username}</p>
+                            {isLoggedIn && review.user.id === loggedInUserId && (
+                              <button onClick={() => handleDeleteReview(review.id)}>Delete</button>
+                            )}
                           </li>
                         ))}
                       </ul>

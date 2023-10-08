@@ -62,7 +62,8 @@ def logout():
 def get_movies():
     movies = Movie.query.all()
     movie_data = []
-
+    loggedInUserId = session.get('user_id')
+    
     for movie in movies:
         reviews = Review.query.filter_by(movie_id=movie.id).all()
         review_data = []
@@ -88,7 +89,7 @@ def get_movies():
         }
         movie_data.append(movie_info)
 
-    return jsonify(movie_data)
+    return jsonify({'movies': movie_data, 'loggedInUserId': loggedInUserId})
 
 @app.route('/api/movies/<int:movie_id>/add-review', methods=['POST'])
 def add_review(movie_id):
