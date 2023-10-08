@@ -73,6 +73,7 @@ def get_movies():
                 review_info = {
                     'id': review.id,
                     'text': review.text,
+                    'rating': review.rating,
                     'user': {
                         'id': user.id,
                         'username': user.username
@@ -98,12 +99,13 @@ def add_review(movie_id):
 
     data = request.get_json()
     review_text = data.get('text')
+    review_rating = data.get('rating')
 
     movie = Movie.query.get(movie_id)
     if not movie:
         return jsonify({'message': 'Movie not found'}), 404
 
-    new_review = Review(user_id=user_id, movie_id=movie_id, text=review_text)
+    new_review = Review(text=review_text, rating=review_rating, user_id=user_id, movie_id=movie_id)
 
     db.session.add(new_review)
     db.session.commit()
