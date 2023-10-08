@@ -48,6 +48,10 @@ user has not logged in.
 AddMovie.js will allow the user to add additional movies to the movie database,
 and EditMovie.js will allow the user to delete movies from the database.
 
+- app.py will handle all the backend routes for the app. The communication from
+frontend to backend is all done here, from registering a username,logging in, 
+to posting a review. 
+
 ## Usage
 
 This application consists of a homepage, which contains a list of movies (they 
